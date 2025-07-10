@@ -55,17 +55,25 @@ jobs:
   deploy:
     name: Deploy to Azure Web App
     runs-on: ubuntu-latest
-    environment: Prod
+    environment:
+      name: Prod
+      url: https://java-project-webapp.azurewebsites.net
     needs: test
+
     steps:
       - name: Download JAR artifact
         uses: actions/download-artifact@v4
         with:
           name: java-app
-  
+
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
-            app-name: 'demo-java-project'
-            publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-            package: java-project-repo-1.0.jar
+          app-name: 'demo-java-project'
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: java-project-repo-1.0.jar
+
+      - name: Output Web App URL
+        run: |
+          echo App deployed at: https://java-project-webapp.azurewebsites.net
+
